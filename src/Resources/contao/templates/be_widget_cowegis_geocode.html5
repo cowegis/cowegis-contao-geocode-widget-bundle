@@ -1,0 +1,41 @@
+<?php
+
+$GLOBALS['TL_CSS'][] = 'bundles/cowegiscontaogeocodewidget/css/backend.css';
+
+$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegisclient/js/cowegis.js';
+$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
+
+?>
+
+<div class="<?= $this->wrapperClass ?>">
+    <input type="text"
+           name="<?= $this->name ?>"
+           id="ctrl_<?= $this->id ?>"
+           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
+           value="<?= $this->value ?>"<?= $this->attributes ?>
+           onfocus="Backend.getScrollOffset()"
+    >
+
+    <a href="#"><img src="bundles/cowegiscontaogeocodewidget/img/map.png" id="ctrl_<?= $this->id ?>_toggle"></a>
+</div>
+
+<?= $this->wizard ?>
+<script>
+    window.addEvent(
+        'domready',
+        function () {
+            new CowegisGeocodeWidget({
+                id: 'ctrl_<?= $this->id ?>',
+                searchPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisSearchPositionLabel'] ?>',
+                applyPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisApplyPositionLabel'] ?>',
+                confirmPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisConfirmPositionLabel'] ?>',
+                okLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisOkLabel'] ?>',
+                cancelLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisCancelLabel'] ?>',
+                modalTitle: '<?= $this->label ?>'<?php if ($this->radius): ?>,
+                radius: <?= json_encode($this->radius) ?>,
+                picker: CowegisGeocodeCirclePicker
+                <?php endif ?>
+            })
+        }
+    );
+</script>

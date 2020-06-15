@@ -1,0 +1,13 @@
+<div class="<?= $this->wrapperClass ?>">
+    <input type="text"
+           name="<?= $this->name ?>"
+           id="ctrl_<?= $this->id ?>"
+           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
+           value="<?= $this->value ?>"<?= $this->attributes ?>
+           onfocus="Backend.getScrollOffset()"
+    >
+
+    <?php if ($this->coordinates): ?>
+        <a href="#" onclick="$('ctrl_<?= $this->coordinates ?>_toggle').click();return false;"><img src="bundles/cowegiscontaogeocodewidget/img/map.png"></a>,
+    <?php endif ?>
+</div>

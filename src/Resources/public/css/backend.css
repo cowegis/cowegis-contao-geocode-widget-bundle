@@ -1,0 +1,26 @@
+.wizard_2 {
+    width: 325px;
+    display: inline-block;
+}
+
+.cowegis-geocode-map {
+    width: 100%;
+    height: 50vh;
+    min-height: 400px
+}
+
+.cowegis-geocode-btn {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 7px 12px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+    background: #eee;
+    transition: background .2s ease;
+}
+
+.cowegis-geocode-btn + .cowegis-geocode-btn {
+    margin-left: 5px;
+}
