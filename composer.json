@@ -23,7 +23,10 @@
         "doctrine/coding-standard": "^7.0"
     },
     "extra": {
-        "contao-manager-plugin": "Cowegis\\Bundle\\ContaoGeocodeWidget\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "Cowegis\\Bundle\\ContaoGeocodeWidget\\ContaoManager\\Plugin",
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     },
     "autoload": {
         "psr-4": {
