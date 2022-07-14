@@ -135,7 +135,9 @@ class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
 class CowegisGeocodeWidget {
     constructor(options) {
         this.options = Object.assign(
-            {},
+            {
+                urlTemplate: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+            },
             {
             mapTemplate: '<cowegis-editor id="cowegis_geocode_widget_map_{id}" class="cowegis-geocode-map"></cowegis-editor>',
                 modalWidth: 800,
@@ -173,7 +175,7 @@ class CowegisGeocodeWidget {
                 layers: [{
                     layerId: 'osm',
                     type: 'tileLayer',
-                    urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                    urlTemplate: this.options.urlTemplate,
                     initialVisible: true,
                     options: {
                         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'

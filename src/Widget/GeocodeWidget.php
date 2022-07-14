@@ -121,6 +121,7 @@ class GeocodeWidget extends Widget
                     'wizard'       => $this->wizard,
                     'label'        => $this->strLabel,
                     'radius'       => $this->buildRadiusOptions(),
+                    'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
                 ]
             );
 

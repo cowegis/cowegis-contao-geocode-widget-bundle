@@ -17,5 +17,8 @@ final class CowegisContaoGeocodeWidgetExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load('services.xml');
+
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $container->setParameter('cowegis_contao_geocode_widget.url_template', $config['url_template'] ?? null);
     }
 }

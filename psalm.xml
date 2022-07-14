@@ -10,6 +10,7 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor"/>
+            <file name="src/DependencyInjection/Configuration.php"/>
         </ignoreFiles>
     </projectFiles>
     
@@ -19,5 +20,11 @@
                 <referencedProperty name="Cowegis\Bundle\Contao\Model\LayerModel::$tile_provider"/>
             </errorLevel>
         </UndefinedMagicPropertyFetch>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <referencedClass name="UnitEnum"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
     </issueHandlers>
 </psalm>
