@@ -1,29 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 
+use Contao\BackendTemplate;
+use Contao\StringUtil;
 use Contao\Widget;
 
+use function is_array;
+use function preg_match;
+use function sprintf;
+
 /**
- * Class GeocodeWidget
- *
- * @property int  size
- * @property bool multiple
+ * @property int    $size
+ * @property bool   $multiple
+ * @property string $radius
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class GeocodeWidget extends Widget
 {
     /**
      * Submit user input.
      *
-     * @var boolean
+     * @var bool
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected $blnSubmitInput = true;
 
     /**
      * Add a for attribute.
      *
-     * @var boolean
+     * @var bool
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected $blnForAttribute = true;
 
     /**
@@ -31,91 +41,86 @@ class GeocodeWidget extends Widget
      *
      * @var string
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected $strTemplate = 'be_widget';
 
     /**
      * Template name.
-     *
-     * @var string
      */
-    protected $widgetTemplate = 'be_widget_cowegis_geocode';
+    protected string $widgetTemplate = 'be_widget_cowegis_geocode';
 
     /**
-     * Validate the input.
-     *
-     * @param mixed $value Given value.
-     *
-     * @return mixed
+     * {@inheritDoc}
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function validator($value)
+    protected function validator($varInput)
     {
-        $value = parent::validator($value);
+        $varInput = parent::validator($varInput);
 
-        if (!$value) {
-            return $value;
+        if (! $varInput) {
+            return $varInput;
         }
 
-        if (is_array($value)) {
-            foreach ($value as $key => $val) {
-                $value[$key] = $this->validator($val);
+        if (is_array($varInput)) {
+            foreach ($varInput as $key => $val) {
+                $varInput[$key] = $this->validator($val);
             }
 
-            return $value;
+            return $varInput;
         }
 
         // See: http://stackoverflow.com/a/18690202
-        if (!preg_match(
-            '#^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)(,[-+]?\d+)?$#',
-            $value
-        )) {
+        if (
+            ! preg_match(
+                '#^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)(,[-+]?\d+)?$#',
+                $varInput
+            )
+        ) {
             $this->addError(
                 sprintf(
                     $GLOBALS['TL_LANG']['ERR']['cowegisInvalidCoordinate'],
-                    $value
+                    $varInput
                 )
             );
         }
 
-        return $value;
+        return $varInput;
     }
 
     /**
      * Generate the widget.
-     *
-     * @return string
      */
-    public function generate()
+    public function generate(): string
     {
         $wrapperClass = 'wizard';
 
-        if (!$this->multiple || !$this->size) {
+        if (! $this->multiple || ! $this->size) {
             $this->size = 1;
         } else {
             $wrapperClass .= ' wizard_' . $this->size;
         }
 
-        if (!is_array($this->value)) {
+        if (! is_array($this->value)) {
             $this->value = [$this->value];
         }
 
         $buffer = '';
 
         for ($index = 0; $index < $this->size; $index++) {
-            $template = new \BackendTemplate($this->widgetTemplate);
+            $template = new BackendTemplate($this->widgetTemplate);
             $template->setData(
                 [
                     'wrapperClass' => $wrapperClass,
                     'widget'       => $this,
-                    'value'        => \StringUtil::specialchars($this->value[$index]),
+                    'value'        => StringUtil::specialchars($this->value[$index]),
                     'class'        => $this->strClass ? ' ' . $this->strClass : '',
-                    'id'           => $this->strId . (($this->size > 1) ? '_' . $index : ''),
-                    'name'         => $this->strName . (($this->size > 1) ? '[]' : ''),
+                    'id'           => $this->strId . ($this->size > 1 ? '_' . $index : ''),
+                    'name'         => $this->strName . ($this->size > 1 ? '[]' : ''),
                     'attributes'   => $this->getAttributes(),
                     'wizard'       => $this->wizard,
                     'label'        => $this->strLabel,
-                    'radius'       => $this->buildRadiusOptions()
+                    'radius'       => $this->buildRadiusOptions(),
                 ]
             );
 
@@ -128,13 +133,13 @@ class GeocodeWidget extends Widget
     /**
      * Build the radius options.
      *
-     * @return array|null
+     * @return array<string,string|int>|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function buildRadiusOptions()
+    private function buildRadiusOptions(): ?array
     {
-        if (!$this->radius || !isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
+        if (! $this->radius || ! isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
             return null;
         }
 
@@ -142,7 +147,7 @@ class GeocodeWidget extends Widget
             'element'      => 'ctrl_' . $this->radius,
             'min'          => 0,
             'max'          => 0,
-            'defaultValue' => 0
+            'defaultValue' => 0,
         ];
 
         if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius]['eval'])) {

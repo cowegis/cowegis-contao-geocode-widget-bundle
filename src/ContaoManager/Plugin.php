@@ -13,12 +13,13 @@ use Cowegis\Bundle\ContaoGeocodeWidget\CowegisContaoGeocodeWidgetBundle;
 
 final class Plugin implements BundlePluginInterface
 {
-    public function getBundles(ParserInterface $parser) : array
+    /** {@inheritDoc} */
+    public function getBundles(ParserInterface $parser): array
     {
         return [
             BundleConfig::create(CowegisClientBundle::class),
             BundleConfig::create(CowegisContaoGeocodeWidgetBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 }

@@ -1,36 +1,52 @@
 {
-    "name": "cowegis/cowegis-contao-geocode-widget-bundle",
-    "type": "contao-bundle",
-    "description": "Cowegis - Content Web GIS Geocode Widget For Contao",
-    "license": "LGPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "David Molineus",
-            "email": "david.molineus@netzmacht.de"
-        }
-    ],
-    "require": {
-        "php": "^7.2",
-        "ext-pdo": "*",
-        "contao-community-alliance/meta-palettes": "^2.0",
-        "contao/core-bundle": "^4.9",
-        "cowegis/cowegis-core": "^1.0@dev",
-        "cowegis/cowegis-client-bundle": "^1.0@dev",
-        "symfony/http-kernel": "^4.4"
-    },
-    "require-dev": {
-        "contao/manager-plugin": "~2.0",
-        "doctrine/coding-standard": "^7.0"
-    },
-    "extra": {
-        "contao-manager-plugin": "Cowegis\\Bundle\\ContaoGeocodeWidget\\ContaoManager\\Plugin",
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Cowegis\\Bundle\\ContaoGeocodeWidget\\": "src/"
-        }
+  "name": "cowegis/cowegis-contao-geocode-widget-bundle",
+  "description": "Cowegis - Content Web GIS Geocode Widget For Contao",
+  "license": "LGPL-3.0-or-later",
+  "type": "contao-bundle",
+  "authors": [
+    {
+      "name": "David Molineus",
+      "email": "david.molineus@netzmacht.de"
     }
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "ext-pdo": "*",
+    "contao-community-alliance/meta-palettes": "^2.0",
+    "contao/core-bundle": "^4.9",
+    "cowegis/cowegis-client-bundle": "^1.0@dev",
+    "cowegis/cowegis-core": "^1.0@dev",
+    "symfony/config": "^4.4 || ^5.4",
+    "symfony/dependency-injection": "^4.4 || ^5.4",
+    "symfony/http-kernel": "^4.4 || ^5.4"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.0",
+    "doctrine/coding-standard": "^9.0",
+    "phpcq/runner-bootstrap": "^1.0@dev"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://token:ANU5iWbJuovTQ5j4Mre31crK5Dx36OscQ33uB7tzHtcDvTO55bAkRl8M8P0Mvp9r@packages.netzmacht.de/r/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Cowegis\\Bundle\\ContaoGeocodeWidget\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "contao-components/installer": true,
+      "contao/manager-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    },
+    "contao-manager-plugin": "Cowegis\\Bundle\\ContaoGeocodeWidget\\ContaoManager\\Plugin"
+  }
 }
