@@ -175,7 +175,7 @@ class CowegisGeocodeWidget {
                 layers: [{
                     layerId: 'osm',
                     type: 'tileLayer',
-                    urlTemplate: this.options.urlTemplate,
+                    urlTemplate: this.options.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
                     initialVisible: true,
                     options: {
                         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'

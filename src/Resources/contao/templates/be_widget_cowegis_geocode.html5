@@ -33,9 +33,11 @@ $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegiscontaogeocodewidget/js/geocode.wid
                 cancelLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisCancelLabel'] ?>',
                 modalTitle: '<?= $this->label ?>',<?php if ($this->radius): ?>
                 radius: <?= json_encode($this->radius) ?>,
-                <?php endif ?>
                 picker: CowegisGeocodeCirclePicker,
+            <?php endif ?>
+            <?php if ($this->urlTemplate): ?>
                 urlTemplate: <?= json_encode($this->urlTemplate) ?>,
+            <?php endif ?>
             })
         }
     );

@@ -11,6 +11,7 @@
   ],
   "require": {
     "php": "^7.4 || ^8.0",
+    "ext-json": "*",
     "ext-pdo": "*",
     "contao-community-alliance/meta-palettes": "^2.0",
     "contao/core-bundle": "^4.9",
