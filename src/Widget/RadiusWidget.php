@@ -25,9 +25,7 @@ class RadiusWidget extends TextField
      */
     protected string $widgetTemplate = 'be_widget_coewgis_radius';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritDoc} */
     public function __get($strKey)
     {
         if ($strKey === 'rgxp') {
@@ -37,9 +35,6 @@ class RadiusWidget extends TextField
         return parent::__get($strKey);
     }
 
-    /**
-     * Generate the widget.
-     */
     public function generate(): string
     {
         $wrapperClass = $this->coordinates ? 'wizard' : '';
@@ -70,7 +65,7 @@ class RadiusWidget extends TextField
                     'wizard'       => $this->wizard,
                     'label'        => $this->strLabel,
                     'coordinates'  => $this->coordinates,
-                ]
+                ],
             );
 
             $buffer .= $template->parse();
@@ -79,10 +74,8 @@ class RadiusWidget extends TextField
         return $buffer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validator($varInput)
+    /** {@inheritDoc} */
+    protected function validator($varInput): mixed
     {
         if (is_numeric($varInput) && $this->steps > 0) {
             $steps    = (int) $this->steps;

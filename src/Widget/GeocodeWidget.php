@@ -74,23 +74,20 @@ class GeocodeWidget extends Widget
         if (
             ! preg_match(
                 '#^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)(,[-+]?\d+)?$#',
-                $varInput
+                $varInput,
             )
         ) {
             $this->addError(
                 sprintf(
                     $GLOBALS['TL_LANG']['ERR']['cowegisInvalidCoordinate'],
-                    $varInput
-                )
+                    $varInput,
+                ),
             );
         }
 
         return $varInput;
     }
 
-    /**
-     * Generate the widget.
-     */
     public function generate(): string
     {
         $wrapperClass = 'wizard';
@@ -122,7 +119,7 @@ class GeocodeWidget extends Widget
                     'label'        => $this->strLabel,
                     'radius'       => $this->buildRadiusOptions(),
                     'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
-                ]
+                ],
             );
 
             $buffer .= $template->parse();
@@ -138,7 +135,7 @@ class GeocodeWidget extends Widget
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function buildRadiusOptions(): ?array
+    private function buildRadiusOptions(): array|null
     {
         if (! $this->radius || ! isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
             return null;
