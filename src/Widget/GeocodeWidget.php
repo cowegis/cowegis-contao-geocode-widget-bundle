@@ -72,10 +72,10 @@ class GeocodeWidget extends Widget
 
         // See: http://stackoverflow.com/a/18690202
         if (
-            ! preg_match(
+            preg_match(
                 '#^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)(,[-+]?\d+)?$#',
                 $varInput,
-            )
+            ) !== 1
         ) {
             $this->addError(
                 sprintf(

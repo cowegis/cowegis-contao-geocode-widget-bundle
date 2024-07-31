@@ -11,10 +11,10 @@ return RectorConfig::configure()
         DeclareStrictTypesRector::class,
     ])
     ->withPreparedSets(
-        //deadCode: true,
-        //codeQuality: true,
-        //typeDeclarations: true,
-        //privatization: true,
-        //instanceOf: true,
-        //strictBooleans: true,
+        deadCode: true,
+        codeQuality: true,
+        typeDeclarations: true,
+        privatization: true,
+        instanceOf: true,
+        strictBooleans: true,
     );
