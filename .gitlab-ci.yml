@@ -10,12 +10,13 @@ before_script:
   - echo "ipv6" >> /etc/modules
 
 job_test_ci:
-  image: discordier/php-runner:7.4-alpine
+  image: discordier/php-runner:8.2-alpine
   stage: pre-test
   except:
     - tags
   before_script:
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@git.netzmacht.de/".insteadOf "https://git.netzmacht.de"
+    - composer config --global http-basic.packages.netzmacht.de token ${NETZMACHT_PACKAGES_TOKEN}
     - composer self-update -vvv && composer --version
     - composer install --prefer-dist --no-interaction --no-progress --no-scripts
     - vendor/bin/phpcq self-update --unsigned

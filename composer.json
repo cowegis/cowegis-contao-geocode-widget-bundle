@@ -14,22 +14,25 @@
     "ext-json": "*",
     "ext-pdo": "*",
     "contao-community-alliance/meta-palettes": "^2.0",
-    "contao/core-bundle": "^4.13 || ^5.02",
+    "contao/core-bundle": "^4.13 || ^5.3",
     "cowegis/cowegis-client-bundle": "^1.0@dev",
     "cowegis/cowegis-core": "^1.0@dev",
-    "symfony/config": "^5.4 || ^6.0",
-    "symfony/dependency-injection": "^5.4 || ^6.0",
-    "symfony/http-kernel": "^5.4 || ^6.0"
+    "symfony/config": "^5.4 || ^6.4",
+    "symfony/dependency-injection": "^5.4 || ^6.4",
+    "symfony/http-kernel": "^5.4 || ^6.4"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.0",
+    "contao/manager-plugin": "^2.1",
     "doctrine/coding-standard": "^12.0",
-    "phpcq/runner-bootstrap": "^1.0@dev"
+    "phpcq/runner-bootstrap": "@dev"
+  },
+  "conflict": {
+    "contao/manager-plugin": "<2.1 || >= 3.0"
   },
   "repositories": [
     {
       "type": "composer",
-      "url": "https://token:ANU5iWbJuovTQ5j4Mre31crK5Dx36OscQ33uB7tzHtcDvTO55bAkRl8M8P0Mvp9r@packages.netzmacht.de/r/"
+      "url": "https://packages.netzmacht.de/r/"
     }
   ],
   "autoload": {
@@ -43,7 +46,8 @@
       "contao/manager-plugin": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "php-http/discovery": true
-    }
+    },
+    "sort-packages": true
   },
   "extra": {
     "branch-alias": {

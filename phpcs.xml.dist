@@ -20,7 +20,6 @@
     <!-- Include full Doctrine Coding Standard -->
     <rule ref="Doctrine">
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator.RequiredNullCoalesceEqualOperator"/>
         <exclude name="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
     </rule>
 
@@ -28,27 +27,6 @@
         <properties>
             <property name="lineLimit" value="120"/>
             <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
-        <properties>
-            <property name="enableUnionTypeHint" value="false" />
-            <property name="enableMixedTypeHint" value="false" />
-        </properties>
-    </rule>
-
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <properties>
-            <property name="enableUnionTypeHint" value="false" />
-            <property name="enableMixedTypeHint" value="false" />
-        </properties>
-    </rule>
-
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
-        <properties>
-            <property name="enableUnionTypeHint" value="false" />
-            <property name="enableMixedTypeHint" value="false" />
         </properties>
     </rule>
 
