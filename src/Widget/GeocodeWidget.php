@@ -7,10 +7,11 @@ namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 use Contao\BackendTemplate;
 use Contao\StringUtil;
 use Contao\Widget;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function assert;
 use function is_array;
 use function preg_match;
-use function sprintf;
 
 /**
  * @property int    $size
@@ -49,11 +50,7 @@ class GeocodeWidget extends Widget
      */
     protected string $widgetTemplate = 'be_widget_cowegis_geocode';
 
-    /**
-     * {@inheritDoc}
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
+    /** {@inheritDoc} */
     protected function validator($varInput)
     {
         $varInput = parent::validator($varInput);
@@ -77,12 +74,7 @@ class GeocodeWidget extends Widget
                 $varInput,
             ) !== 1
         ) {
-            $this->addError(
-                sprintf(
-                    $GLOBALS['TL_LANG']['ERR']['cowegisInvalidCoordinate'],
-                    $varInput,
-                ),
-            );
+            $this->addError($this->translate('ERR.cowegisInvalidCoordinate', [$varInput], 'contao_default'));
         }
 
         return $varInput;
@@ -158,5 +150,14 @@ class GeocodeWidget extends Widget
         }
 
         return $options;
+    }
+
+    /** @param array<array-key, string|int> $parameters */
+    private function translate(string $key, array $parameters = [], string|null $domain = null): string
+    {
+        $translator = self::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
+        return $translator->trans($key, $parameters, $domain);
     }
 }
