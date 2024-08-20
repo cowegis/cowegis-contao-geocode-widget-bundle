@@ -16,7 +16,6 @@
     "contao-community-alliance/meta-palettes": "^2.0",
     "contao/core-bundle": "^4.13 || ^5.3",
     "cowegis/cowegis-client-bundle": "^1.0@dev",
-    "cowegis/cowegis-core": "^1.0@dev",
     "symfony/config": "^5.4 || ^6.4",
     "symfony/dependency-injection": "^5.4 || ^6.4",
     "symfony/http-kernel": "^5.4 || ^6.4",
