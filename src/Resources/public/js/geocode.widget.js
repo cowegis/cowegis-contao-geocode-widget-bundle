@@ -139,7 +139,7 @@ class CowegisGeocodeWidget {
                 urlTemplate: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
             },
             {
-            mapTemplate: '<cowegis-editor id="cowegis_geocode_widget_map_{id}" class="cowegis-geocode-map"></cowegis-editor>',
+            mapTemplate: '<cowegis-editor id="cowegis_geocode_widget_map_{id}" class="cowegis-geocode-map" style="color-scheme: only light"></cowegis-editor>',
                 modalWidth: 800,
                 modalTitle: 'Choose coordinates',
                 searchPositionLabel: 'Search',
