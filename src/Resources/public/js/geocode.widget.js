@@ -184,7 +184,7 @@ class CowegisGeocodeWidget {
             },
             assets: [{
                 type: 'stylesheet',
-                url: 'bundles/cowegisclient/css/cowegis.css'
+                url: '/bundles/cowegisclient/css/cowegis.css'
             }]
         };
 
