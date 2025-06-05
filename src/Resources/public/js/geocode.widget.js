@@ -70,6 +70,9 @@ class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
     _createMarker(position, radius) {
         this.marker = this.map.leaflet.circle(position, { radius: radius || this.options.radius.default, pmIgnore: false });
         this.marker.addTo(this.map.map);
+        this.marker.on('pm:enable', function () {
+            this.map.map.fitBounds(this.marker.getBounds());
+        }.bind(this));
 
         this.marker.on('pm:markerdragend', function () {
             var radius = this.marker.getRadius();
@@ -87,9 +90,7 @@ class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
             }
 
             if (radius !== this.marker.getRadius()) {
-                this.marker.pm.disable();
                 this.marker.setRadius(radius);
-                this._enableEditMode();
             } else {
                 this.marker.pm._outerMarker.setTooltipContent(this._formatRadius(radius));
             }
@@ -175,10 +176,10 @@ class CowegisGeocodeWidget {
                 layers: [{
                     layerId: 'osm',
                     type: 'tileLayer',
-                    urlTemplate: this.options.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                    urlTemplate: this.options.geocode.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
                     initialVisible: true,
                     options: {
-                        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                        attribution: this.options.geocode.attribution || '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                     },
                 }],
             },
@@ -311,6 +312,22 @@ class CowegisGeocodeWidget {
             }
         }.bind(this));
 
+        this.mapOptions.map.controls[0].options.query
+            = this._createQuery(this.options.geocode.queryPattern, this.options.geocode.queryWidgetIds);
+
         map.config = this.mapOptions;
+    }
+
+    _createQuery(queryPattern = '', queryWidgetIds = []) {
+        let widget;
+        for (let i = 0; i < queryWidgetIds.length; i++) {
+            if (!(widget = document.getElementById(queryWidgetIds[i]))) {
+                continue;
+            }
+
+            queryPattern = queryPattern.replace(`#${queryWidgetIds[i]}#`, widget.value);
+        }
+
+        return queryPattern;
     }
 }
