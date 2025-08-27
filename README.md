@@ -30,26 +30,7 @@ php composer.phar require cowegis/cowegis-contao-geocode-widget-bundle
 
 ```
 
-### 2. Update your AppKernel.php
-git
-If you use the managed edition of Contao you can skip this step.
-
-```php
-
-  // Dependency is automatically installed and has to be registered
-  new Contao\CoreBundle\HttpKernel\Bundle\ContaoModuleBundle('cowegis-libs', $this->getRootDir()),
-
-  // Register the bundle
-  new Cowegis\Bundle\ContaoGeocodeWidget\CowegisContaoGeocodeWidgetBundle(),
-```
-
-### 3. Update the assets
-
-```bash
-bin/console assets:install --symlink
-```
-
-### 4. Use the widget
+### 2. Use the widget
 
 #### Coordinates only
 
