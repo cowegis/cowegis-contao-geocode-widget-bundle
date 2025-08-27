@@ -8,6 +8,6 @@
     >
 
     <?php if ($this->coordinates): ?>
-        <a href="#" onclick="$('ctrl_<?= $this->coordinates ?>_toggle').click();return false;"><img src="bundles/cowegiscontaogeocodewidget/img/map.png"></a>,
+        <a href="#" onclick="$('ctrl_<?= $this->coordinates ?>_toggle').click();return false;"><img src="/bundles/cowegiscontaogeocodewidget/img/map.png"></a>,
     <?php endif ?>
 </div>
