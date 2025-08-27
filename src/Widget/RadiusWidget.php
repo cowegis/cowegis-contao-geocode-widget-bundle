@@ -23,7 +23,7 @@ class RadiusWidget extends TextField
     /**
      * Template name.
      */
-    protected string $widgetTemplate = 'be_widget_coewgis_radius';
+    protected string $widgetTemplate = 'be_widget_cowegis_radius';
 
     /** {@inheritDoc} */
     public function __get($strKey)
