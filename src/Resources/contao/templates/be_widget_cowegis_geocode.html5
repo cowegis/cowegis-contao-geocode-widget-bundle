@@ -31,13 +31,14 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
                 confirmPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisConfirmPositionLabel'] ?>',
                 okLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisOkLabel'] ?>',
                 cancelLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisCancelLabel'] ?>',
-                modalTitle: '<?= $this->label ?>',<?php if ($this->radius): ?>
-                radius: <?= json_encode($this->radius) ?>,
-                picker: CowegisGeocodeCirclePicker,
-            <?php endif ?>
-            <?php if ($this->urlTemplate): ?>
-                urlTemplate: <?= json_encode($this->urlTemplate) ?>,
-            <?php endif ?>
+                modalTitle: '<?= $this->label ?>',
+                <?php if ($this->radius): ?>
+                    radius: <?= json_encode($this->radius) ?>,
+                    picker: CowegisGeocodeCirclePicker,
+                <?php endif ?>
+                <?php if ($this->geocode): ?>
+                    geocode: <?= json_encode($this->geocode) ?>,
+                <?php endif ?>
             })
         }
     );

@@ -55,7 +55,7 @@ class GeocodeWidget extends Widget
     {
         $varInput = parent::validator($varInput);
 
-        if (! $varInput) {
+        if (!$varInput) {
             return $varInput;
         }
 
@@ -84,13 +84,13 @@ class GeocodeWidget extends Widget
     {
         $wrapperClass = 'wizard';
 
-        if (! $this->multiple || ! $this->size) {
+        if (!$this->multiple || !$this->size) {
             $this->size = 1;
         } else {
             $wrapperClass .= ' wizard_' . $this->size;
         }
 
-        if (! is_array($this->value)) {
+        if (!is_array($this->value)) {
             $this->value = [$this->value];
         }
 
@@ -110,7 +110,7 @@ class GeocodeWidget extends Widget
                     'wizard'       => $this->wizard,
                     'label'        => $this->strLabel,
                     'radius'       => $this->buildRadiusOptions(),
-                    'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
+                    'geocode'      => $this->buildGeocodeOptions(),
                 ],
             );
 
@@ -118,6 +118,38 @@ class GeocodeWidget extends Widget
         }
 
         return $buffer;
+    }
+
+    /**
+     * Build the geocode options.
+     *
+     * @return array<string,string|int>
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function buildGeocodeOptions(): array
+    {
+        $options['urlTemplate'] = null;
+
+        if ('' !== ($urlTemplate = self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'))) {
+            $options['urlTemplate'] = $urlTemplate;
+        }
+
+        if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'])) {
+            $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'];
+
+            if ('' === ($options['urlTemplate'] ?? '')) {
+                $options['urlTemplate'] = $config['url_template'] ?? '';
+            }
+
+            $options['attribution']    = $config['attribution'] ?? '';
+            $options['queryPattern']   = $config['query_pattern'] ?? '';
+            $options['queryWidgetIds'] = $config['query_widget_ids'] ?? [];
+
+            return $options;
+        }
+
+        return $options;
     }
 
     /**
@@ -129,24 +161,25 @@ class GeocodeWidget extends Widget
      */
     private function buildRadiusOptions(): array|null
     {
-        if (! $this->radius || ! isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
+        if (!$this->radius || !isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
             return null;
         }
 
         $options = [
-            'element'      => 'ctrl_' . $this->radius,
-            'min'          => 0,
-            'max'          => 0,
-            'defaultValue' => 0,
+            'element' => 'ctrl_' . $this->radius,
+            'min'     => 1,
+            'max'     => 0,
+            'default' => 0,
+            'steps'   => 0,
         ];
 
         if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius]['eval'])) {
             $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius]['eval'];
 
-            $options['min']          = isset($config['minval']) ? (int) $config['minval'] : 0;
-            $options['max']          = isset($config['maxval']) ? (int) $config['maxval'] : 0;
-            $options['defaultValue'] = isset($config['default']) ? (int) $config['default'] : 0;
-            $options['steps']        = isset($config['steps']) ? (int) $config['steps'] : 0;
+            $options['min']     = max(1, (int) ($config['minval'] ?? $options['min']));
+            $options['max']     = (int) ($config['maxval'] ?? $options['max']);
+            $options['default'] = (int) ($config['default'] ?? $options['default']);
+            $options['steps']   = (int) ($config['steps'] ?? $options['steps']);
         }
 
         return $options;
