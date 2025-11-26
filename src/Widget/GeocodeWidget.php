@@ -156,7 +156,7 @@ class GeocodeWidget extends Widget
     private function buildMapOptions(): array
     {
         $options = [
-            'maxZoom' => 19,
+            'maxZoom' => 18,
             'minZoom' => 2,
             'center' => [0,0],
             'zoom' => 2,
