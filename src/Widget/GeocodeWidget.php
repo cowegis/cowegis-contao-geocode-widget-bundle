@@ -110,6 +110,7 @@ class GeocodeWidget extends Widget
                     'wizard'       => $this->wizard,
                     'label'        => $this->strLabel,
                     'radius'       => $this->buildRadiusOptions(),
+                    'mapOptions'   => $this->buildMapOptions(),
                     'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
                 ],
             );
@@ -147,6 +148,34 @@ class GeocodeWidget extends Widget
             $options['max']          = isset($config['maxval']) ? (int) $config['maxval'] : 0;
             $options['defaultValue'] = isset($config['default']) ? (int) $config['default'] : 0;
             $options['steps']        = isset($config['steps']) ? (int) $config['steps'] : 0;
+        }
+
+        return $options;
+    }
+
+    private function buildMapOptions(): array
+    {
+        $options = [
+            'maxZoom' => 19,
+            'minZoom' => 2,
+            'center' => [0,0],
+            'zoom' => 2,
+        ];
+
+        if ($this->mapMaxZoom > 0) {
+            $options['maxZoom'] = (int) $this->mapMaxZoom;
+        }
+
+        if ($this->mapMinZoom > 0) {
+            $options['minZoom'] = (int) $this->mapMinZoom;
+        }
+
+        if ($this->mapDefaultZoom > 0) {
+            $options['zoom'] = (int) $this->mapDefaultZoom;
+        }
+
+        if (is_array($this->mapCenter)) {
+            $options['center'] = array_map(intval(...), $this->mapCenter);
         }
 
         return $options;
