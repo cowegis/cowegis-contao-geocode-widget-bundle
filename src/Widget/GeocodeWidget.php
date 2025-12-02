@@ -123,7 +123,6 @@ class GeocodeWidget extends Widget
                     'geocode'      => $this->buildGeocodeOptions(),
                     'mapOptions'   => $this->buildMapOptions(),
                     'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
-                ],
             );
 
             $buffer .= $template->parse();
@@ -203,8 +202,8 @@ class GeocodeWidget extends Widget
         $options = [
             'maxZoom' => 18,
             'minZoom' => 2,
-            'center' => [0,0],
-            'zoom' => 2,
+            'center'  => [0,0],
+            'zoom'    => 2,
         ];
 
         if ($this->mapMaxZoom > 0) {
