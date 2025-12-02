@@ -10,10 +10,12 @@ use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Cowegis\Bundle\Client\CowegisClientBundle;
 use Cowegis\Bundle\ContaoGeocodeWidget\CowegisContaoGeocodeWidgetBundle;
+use Override;
 
 final class Plugin implements BundlePluginInterface
 {
     /** {@inheritDoc} */
+    #[Override]
     public function getBundles(ParserInterface $parser): array
     {
         return [

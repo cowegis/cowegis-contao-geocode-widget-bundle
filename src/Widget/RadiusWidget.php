@@ -7,6 +7,7 @@ namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 use Contao\BackendTemplate;
 use Contao\StringUtil;
 use Contao\TextField;
+use Override;
 
 use function is_array;
 use function is_numeric;
@@ -17,6 +18,7 @@ use function trim;
  * @property string $coordinates
  * @property string $steps
  * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress ClassMustBeFinal
  */
 class RadiusWidget extends TextField
 {
@@ -26,6 +28,7 @@ class RadiusWidget extends TextField
     protected string $widgetTemplate = 'be_widget_cowegis_radius';
 
     /** {@inheritDoc} */
+    #[Override]
     public function __get($strKey)
     {
         if ($strKey === 'rgxp') {
@@ -35,6 +38,7 @@ class RadiusWidget extends TextField
         return parent::__get($strKey);
     }
 
+    #[Override]
     public function generate(): string
     {
         $wrapperClass = $this->coordinates ? 'wizard' : '';
@@ -75,12 +79,13 @@ class RadiusWidget extends TextField
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function validator($varInput): mixed
     {
         if (is_numeric($varInput) && $this->steps > 0) {
             $steps    = (int) $this->steps;
             $varInput = (int) $varInput;
-            $varInput = $steps * round($varInput / $steps);
+            $varInput = $steps * (int) round($varInput / $steps);
         }
 
         return parent::validator($varInput);

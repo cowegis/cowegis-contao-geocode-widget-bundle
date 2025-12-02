@@ -7,17 +7,25 @@ namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 use Contao\BackendTemplate;
 use Contao\StringUtil;
 use Contao\Widget;
+use Override;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function array_map;
 use function assert;
+use function intval;
 use function is_array;
 use function preg_match;
 
 /**
- * @property int    $size
- * @property bool   $multiple
- * @property string $radius
+ * @property int             $size
+ * @property bool            $multiple
+ * @property string          $radius
+ * @property string|int|null $mapMaxZoom
+ * @property string|int|null $mapMinZoom
+ * @property string|int|null $mapDefaultZoom
+ * @property array|null      $mapCenter
  * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress ClassMustBeFinal
  */
 class GeocodeWidget extends Widget
 {
@@ -51,6 +59,7 @@ class GeocodeWidget extends Widget
     protected string $widgetTemplate = 'be_widget_cowegis_geocode';
 
     /** {@inheritDoc} */
+    #[Override]
     protected function validator($varInput)
     {
         $varInput = parent::validator($varInput);
@@ -80,6 +89,7 @@ class GeocodeWidget extends Widget
         return $varInput;
     }
 
+    #[Override]
     public function generate(): string
     {
         $wrapperClass = 'wizard';
@@ -153,6 +163,7 @@ class GeocodeWidget extends Widget
         return $options;
     }
 
+    /** @return array<string, mixed> */
     private function buildMapOptions(): array
     {
         $options = [
