@@ -12,7 +12,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_map;
 use function assert;
-use function intval;
 use function is_array;
 use function preg_match;
 
@@ -123,6 +122,7 @@ class GeocodeWidget extends Widget
                     'geocode'      => $this->buildGeocodeOptions(),
                     'mapOptions'   => $this->buildMapOptions(),
                     'urlTemplate'  => self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
+                ]
             );
 
             $buffer .= $template->parse();
