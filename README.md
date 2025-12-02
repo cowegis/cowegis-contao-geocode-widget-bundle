@@ -8,11 +8,6 @@ Cowegis geocode widget
 
 This extension provides a widget to pick coordinates from a map. It uses the leaflet framework.
 
-Changlog
---------
-
-See [CHANGELOG](CHANGELOG.md).
-
 Requirements
 ------------
 
