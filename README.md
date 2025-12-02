@@ -1,7 +1,7 @@
 Cowegis geocode widget
 ======================
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/cowegis/cowegis-contao-geocode-widget-bundle/diagnostics.yaml?logo=githubactions&logoColor=%23fff&style=for-the-badge)](https://github.com/netzmacht/contao-leaflet-geocode-widget/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/cowegis/cowegis-contao-geocode-widget-bundle/diagnostics.yaml?branch=master&logo=githubactions&logoColor=%23fff&style=for-the-badge)](https://github.com/netzmacht/contao-leaflet-geocode-widget/actions)
 [![Version](http://img.shields.io/packagist/v/netzmacht/contao-leaflet-geocode-widget.svg?style=flat-square)](http://packagist.org/packages/cowegis/cowegis-contao-geocode-widget-bundle)
 [![License](http://img.shields.io/packagist/l/netzmacht/contao-leaflet-geocode-widget.svg?style=flat-square)](http://packagist.org/packages/cowegis/cowegis-contao-geocode-widget-bundle)
 [![Downloads](http://img.shields.io/packagist/dt/netzmacht/contao-leaflet-geocode-widget.svg?style=flat-square)](http://packagist.org/packages/cowegis/cowegis-contao-geocode-widget-bundle)
