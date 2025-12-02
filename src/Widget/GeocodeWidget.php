@@ -64,7 +64,7 @@ class GeocodeWidget extends Widget
     {
         $varInput = parent::validator($varInput);
 
-        if (!$varInput) {
+        if (! $varInput) {
             return $varInput;
         }
 
@@ -94,13 +94,13 @@ class GeocodeWidget extends Widget
     {
         $wrapperClass = 'wizard';
 
-        if (!$this->multiple || !$this->size) {
+        if (! $this->multiple || ! $this->size) {
             $this->size = 1;
         } else {
             $wrapperClass .= ' wizard_' . $this->size;
         }
 
-        if (!is_array($this->value)) {
+        if (! is_array($this->value)) {
             $this->value = [$this->value];
         }
 
@@ -173,7 +173,7 @@ class GeocodeWidget extends Widget
      */
     private function buildRadiusOptions(): array|null
     {
-        if (!$this->radius || !isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
+        if (! $this->radius || ! isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->radius])) {
             return null;
         }
 
