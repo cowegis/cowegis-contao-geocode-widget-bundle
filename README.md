@@ -43,6 +43,33 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
     'sql' => 'varchar(255) NOT NULL default \'\''
 ];
 ```
+However, if you already have input fields for the address, such as postcode, town and street, you don't want to have
+to enter this information again in the search field in the pop-up.
+
+With the appropriate information in the DCA, you can automatically transfer this information to the search field – here
+is an example for fields `street`, `zip` and `city` and country fixed as "Deutschland":
+
+```php
+$GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
+    'label'     => ['Coordinates', 'Enter the coordinates - comma separated as \'latitude,longitude\'.'],
+    'inputType' => 'cowegis_geocode',
+    'eval'      => [
+        'query_widget_ids' => ['ctrl_street', 'ctrl_zip', 'ctrl_city'],
+        'query_pattern'    => '#ctrl_street# #ctrl_zip# #ctrl_city#, Deutschland',
+        'url_template'     => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        'attribution'      => 'Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'.
+        'tl_class'         => 'w50',
+    ],
+    'sql' => 'varchar(255) NOT NULL default \'\''
+];
+```
+
+The information is as follows:
+
+- `query_widget_ids`: List of field IDs from which the information is to be taken
+- `query_pattern`: Pattern as it appears in the search input in the pop-up - the field IDs with `#<id>#`
+- `url_template`: Template for the map
+- `attribution`: Note on the map layer
 
 #### Coordinates and radius
 
