@@ -1,9 +1,9 @@
 <?php
 
-$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
+$GLOBALS['TL_CSS'][] = 'bundles/cowegiscontaogeocodewidget/css/backend.css';
 
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegisclient/js/cowegis.js';
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
+$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegisclient/js/cowegis.js';
+$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
 
 ?>
 
@@ -33,12 +33,12 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
                 cancelLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisCancelLabel'] ?>',
                 modalTitle: '<?= $this->label ?>',
                 map: <?= json_encode($this->mapOptions) ?>,<?php if ($this->radius): ?>
-                radius: <?= json_encode($this->radius) ?>,
-                picker: CowegisGeocodeCirclePicker,
-            <?php endif ?>
-            <?php if ($this->urlTemplate): ?>
-                urlTemplate: <?= json_encode($this->urlTemplate) ?>,
-            <?php endif ?>
+                    radius: <?= json_encode($this->radius) ?>,
+                    picker: CowegisGeocodeCirclePicker,
+                <?php endif ?>
+                <?php if ($this->geocode): ?>
+                    geocode: <?= json_encode($this->geocode) ?>,
+                <?php endif ?>
             })
         }
     );
