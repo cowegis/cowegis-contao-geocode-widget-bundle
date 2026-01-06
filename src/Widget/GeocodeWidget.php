@@ -14,6 +14,7 @@ use function array_map;
 use function assert;
 use function intval;
 use function is_array;
+use function max;
 use function preg_match;
 
 /**
@@ -135,22 +136,23 @@ class GeocodeWidget extends Widget
     /**
      * Build the geocode options.
      *
-     * @return array<string,string|int>
+     * @return array<string, array<string>|string>|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function buildGeocodeOptions(): array
+    private function buildGeocodeOptions(): array|null
     {
-        $options['urlTemplate'] = null;
+        $options = null;
 
-        if ('' !== ($urlTemplate = self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'))) {
+        $urlTemplate = self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template');
+        if ($urlTemplate !== '') {
             $options['urlTemplate'] = $urlTemplate;
         }
 
         if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'])) {
             $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'];
 
-            if ('' === ($options['urlTemplate'] ?? '')) {
+            if (($options['urlTemplate'] ?? '') === '') {
                 $options['urlTemplate'] = $config['url_template'] ?? '';
             }
 
@@ -167,7 +169,7 @@ class GeocodeWidget extends Widget
     /**
      * Build the radius options.
      *
-     * @return array<string,string|int>|null
+     * @return array<string, string|int>|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -203,8 +205,8 @@ class GeocodeWidget extends Widget
         $options = [
             'maxZoom' => 18,
             'minZoom' => 2,
-            'center' => [0,0],
-            'zoom' => 2,
+            'center'  => [0,0],
+            'zoom'    => 2,
         ];
 
         if ($this->mapMaxZoom > 0) {
