@@ -1,9 +1,9 @@
 <?php
 
-$GLOBALS['TL_CSS'][] = 'bundles/cowegiscontaogeocodewidget/css/backend.css';
+$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
 
-$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegisclient/js/cowegis.js';
-$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
+$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegisclient/js/cowegis.js';
+$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
 
 ?>
 
