@@ -70,9 +70,6 @@ class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
     _createMarker(position, radius) {
         this.marker = this.map.leaflet.circle(position, { radius: radius || this.options.radius.default, pmIgnore: false });
         this.marker.addTo(this.map.map);
-        this.marker.on('pm:enable', function () {
-            this.map.map.fitBounds(this.marker.getBounds());
-        }.bind(this));
 
         this.marker.on('pm:markerdragend', function () {
             var radius = this.marker.getRadius();
