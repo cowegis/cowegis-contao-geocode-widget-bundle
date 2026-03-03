@@ -310,7 +310,7 @@ class CowegisGeocodeWidget {
         }.bind(this));
 
         this.mapOptions.map.controls[0].options.query
-            = this._createQuery(this.options.geocode.queryPattern, this.options.geocode.queryWidgetIds);
+            = this._createQuery(this.options.geocode.queryPattern);
 
         map.config = this.mapOptions;
     }

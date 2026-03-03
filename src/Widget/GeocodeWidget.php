@@ -152,7 +152,6 @@ class GeocodeWidget extends Widget
             $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'];
 
             $options['queryPattern']   = $config['query_pattern'] ?? '';
-            $options['queryWidgetIds'] = $config['query_widget_ids'] ?? [];
         }
 
         return $options ?: null;
