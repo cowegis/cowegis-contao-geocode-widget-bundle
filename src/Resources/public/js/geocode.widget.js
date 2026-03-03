@@ -173,10 +173,10 @@ class CowegisGeocodeWidget {
                 layers: [{
                     layerId: 'osm',
                     type: 'tileLayer',
-                    urlTemplate: this.options.geocode.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                    urlTemplate: this.options.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
                     initialVisible: true,
                     options: {
-                        attribution: this.options.geocode.attribution || '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                        attribution: this.options.attribution || '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                     },
                 }],
             },
