@@ -87,9 +87,7 @@ class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
             }
 
             if (radius !== this.marker.getRadius()) {
-                this.marker.pm.disable();
                 this.marker.setRadius(radius);
-                this._enableEditMode();
             } else {
                 this.marker.pm._outerMarker.setTooltipContent(this._formatRadius(radius));
             }
@@ -178,7 +176,7 @@ class CowegisGeocodeWidget {
                     urlTemplate: this.options.urlTemplate || 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
                     initialVisible: true,
                     options: {
-                        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                        attribution: this.options.attribution || '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                     },
                 }],
             },
@@ -311,6 +309,22 @@ class CowegisGeocodeWidget {
             }
         }.bind(this));
 
+        this.mapOptions.map.controls[0].options.query
+            = this._createQuery(this.options.geocode.queryPattern, this.options.geocode.queryWidgetIds);
+
         map.config = this.mapOptions;
+    }
+
+    _createQuery(queryPattern = '', queryWidgetIds = []) {
+        let widget;
+        for (let i = 0; i < queryWidgetIds.length; i++) {
+            if (!(widget = document.getElementById(queryWidgetIds[i]))) {
+                continue;
+            }
+
+            queryPattern = queryPattern.replace(`#${queryWidgetIds[i]}#`, widget.value);
+        }
+
+        return queryPattern;
     }
 }
