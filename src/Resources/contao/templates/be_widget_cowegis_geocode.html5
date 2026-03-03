@@ -1,4 +1,10 @@
-<?php $GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css'; ?>
+<?php
+
+$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
+
+$GLOBALS['TL_JAVASCRIPT']['cowegisclient'] = '/bundles/cowegisclient/js/cowegis.js';
+$GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
+?>
 
 <div class="<?= $this->wrapperClass ?>">
     <input type="text"
@@ -13,8 +19,6 @@
 </div>
 
 <?= $this->wizard ?>
-<script src="/bundles/cowegisclient/js/cowegis.js"></script>
-<script src="/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js"></script>
 <script>
     (function () {
         function init() {
