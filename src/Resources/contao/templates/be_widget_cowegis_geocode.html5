@@ -36,6 +36,9 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
                 radius: <?= json_encode($this->radius) ?>,
                 picker: CowegisGeocodeCirclePicker,
             <?php endif ?>
+            <?php if ($this->urlTemplate): ?>
+                urlTemplate: <?= json_encode($this->urlTemplate) ?>,
+            <?php endif ?>
             <?php if ($this->geocode): ?>
                 geocode: <?= json_encode($this->geocode) ?>,
             <?php endif ?>
