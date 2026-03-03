@@ -315,16 +315,10 @@ class CowegisGeocodeWidget {
         map.config = this.mapOptions;
     }
 
-    _createQuery(queryPattern = '', queryWidgetIds = []) {
-        let widget;
-        for (let i = 0; i < queryWidgetIds.length; i++) {
-            if (!(widget = document.getElementById(queryWidgetIds[i]))) {
-                continue;
-            }
-
-            queryPattern = queryPattern.replace(`#${queryWidgetIds[i]}#`, widget.value);
-        }
-
-        return queryPattern;
+    _createQuery(queryPattern = '') {
+        return queryPattern.replace(/#([^#]+)#/g, function (match, widgetId) {
+            const widget = document.getElementById(widgetId);
+            return widget ? widget.value : '';
+        });
     }
 }

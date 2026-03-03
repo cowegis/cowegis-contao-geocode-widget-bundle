@@ -54,7 +54,6 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
     'label'     => ['Coordinates', 'Enter the coordinates - comma separated as \'latitude,longitude\'.'],
     'inputType' => 'cowegis_geocode',
     'eval'      => [
-        'query_widget_ids' => ['ctrl_street', 'ctrl_zip', 'ctrl_city'],
         'query_pattern'    => '#ctrl_street# #ctrl_zip# #ctrl_city#, Deutschland',
         'url_template'     => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         'attribution'      => 'Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'.
@@ -66,7 +65,6 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
 
 The information is as follows:
 
-- `query_widget_ids`: List of field IDs from which the information is to be taken
 - `query_pattern`: Pattern as it appears in the search input in the pop-up - the field IDs with `#<id>#`
 - `url_template`: Template for the map
 - `attribution`: Note on the map layer
