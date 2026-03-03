@@ -23,7 +23,12 @@ jobs:
           - php: '8.3'
             phpcq_install: 'update'
             phpcq_flags: ''
-
+          - php: '8.4'
+            phpcq_install: 'update'
+            phpcq_flags: ''
+          - php: '8.5'
+            phpcq_install: 'update'
+            phpcq_flags: ''
     steps:
       - name: Pull source
         uses: actions/checkout@v6
@@ -35,7 +40,7 @@ jobs:
           coverage: xdebug2
 
       - name: Cache composer cache directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: composer-cache-dir-${{ matrix.php }}
         with:
@@ -46,7 +51,7 @@ jobs:
         run: composer install
 
       - name: Cache vendor directory of phpcq tool runner
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: vendor-${{ matrix.php }}
         with:
@@ -65,7 +70,7 @@ jobs:
         run: $GITHUB_WORKSPACE/vendor/bin/phpcq run -o github-action -o default ${{ matrix.phpcq_flags }} -v
 
       - name: Upload build directory to artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: ${{ success() }} || ${{ failure() }}
         with:
           name: phpcq-builds-php-${{ matrix.php }}

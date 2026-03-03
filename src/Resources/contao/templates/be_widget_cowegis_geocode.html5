@@ -1,11 +1,4 @@
-<?php
-
-$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
-
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegisclient/js/cowegis.js';
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
-
-?>
+<?php $GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css'; ?>
 
 <div class="<?= $this->wrapperClass ?>">
     <input type="text"
@@ -20,12 +13,19 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
 </div>
 
 <?= $this->wizard ?>
+<script src="/bundles/cowegisclient/js/cowegis.js"></script>
+<script src="/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js"></script>
 <script>
-    window.addEvent(
-        'domready',
-        function () {
+    (function () {
+        function init() {
+            var id = 'ctrl_<?= $this->id ?>';
+            var el = document.getElementById(id);
+            if (!el) {
+                return false;
+            }
+
             new CowegisGeocodeWidget({
-                id: 'ctrl_<?= $this->id ?>',
+                id: id,
                 searchPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisSearchPositionLabel'] ?>',
                 applyPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisApplyPositionLabel'] ?>',
                 confirmPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisConfirmPositionLabel'] ?>',
@@ -42,7 +42,17 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
             <?php if ($this->geocode): ?>
                 geocode: <?= json_encode($this->geocode) ?>,
             <?php endif ?>
-            })
+            });
+            
+            return true;
         }
-    );
+
+        var observer = new MutationObserver(function () {
+            if (init()) {
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.documentElement, {childList: true, subtree: true});
+    }());
 </script>
