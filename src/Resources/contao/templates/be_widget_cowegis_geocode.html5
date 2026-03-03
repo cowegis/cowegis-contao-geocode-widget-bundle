@@ -21,11 +21,15 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
 
 <?= $this->wizard ?>
 <script>
-    window.addEvent(
-        'domready',
-        function () {
+    (function () {
+        function init() {
+            var el = document.getElementById('ctrl_<?= $this->id ?>');
+            if (!el) {
+                return false;
+            }
+
             new CowegisGeocodeWidget({
-                id: 'ctrl_<?= $this->id ?>',
+                id: id,
                 searchPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisSearchPositionLabel'] ?>',
                 applyPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisApplyPositionLabel'] ?>',
                 confirmPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisConfirmPositionLabel'] ?>',
@@ -39,7 +43,19 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
             <?php if ($this->urlTemplate): ?>
                 urlTemplate: <?= json_encode($this->urlTemplate) ?>,
             <?php endif ?>
-            })
+            });
+
+            return true;
         }
-    );
+
+        if (!init()) {
+            var observer = new MutationObserver(function () {
+                if (init()) {
+                    observer.disconnect();
+                }
+            });
+
+            observer.observe(document.documentElement, {childList: true, subtree: true});
+        }
+    }());
 </script>
