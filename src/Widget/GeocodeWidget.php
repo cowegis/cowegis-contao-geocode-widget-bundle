@@ -24,6 +24,7 @@ use function preg_match;
  * @property string|int|null $mapMaxZoom
  * @property string|int|null $mapMinZoom
  * @property string|int|null $mapDefaultZoom
+ * @property string|null     $query_pattern
  * @property array|null      $mapCenter
  * @property string|null     $attribution
  * @property string|null     $urlTemplate
@@ -146,15 +147,11 @@ class GeocodeWidget extends Widget
      */
     private function buildGeocodeOptions(): array|null
     {
-        $options = [];
-
-        if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'])) {
-            $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'];
-
-            $options['queryPattern'] = $config['query_pattern'] ?? '';
+        if ($this->query_pattern !== null) {
+            return ['queryPattern' => $this->query_pattern];
         }
 
-        return $options ?: null;
+        return null;
     }
 
     /**
