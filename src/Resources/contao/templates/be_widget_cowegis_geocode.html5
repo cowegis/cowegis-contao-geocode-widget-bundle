@@ -1,11 +1,4 @@
-<?php
-
-$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
-
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegisclient/js/cowegis.js';
-$GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
-
-?>
+<?php $GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css'; ?>
 
 <div class="<?= $this->wrapperClass ?>">
     <input type="text"
@@ -20,10 +13,13 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
 </div>
 
 <?= $this->wizard ?>
+<script src="/bundles/cowegisclient/js/cowegis.js"></script>
+<script src="/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js"></script>
 <script>
     (function () {
         function init() {
-            var el = document.getElementById('ctrl_<?= $this->id ?>');
+            var id = 'ctrl_<?= $this->id ?>';
+            var el = document.getElementById(id);
             if (!el) {
                 return false;
             }
@@ -48,14 +44,12 @@ $GLOBALS['TL_JAVASCRIPT'][] = '/bundles/cowegiscontaogeocodewidget/js/geocode.wi
             return true;
         }
 
-        if (!init()) {
-            var observer = new MutationObserver(function () {
-                if (init()) {
-                    observer.disconnect();
-                }
-            });
+        var observer = new MutationObserver(function () {
+            if (init()) {
+                observer.disconnect();
+            }
+        });
 
-            observer.observe(document.documentElement, {childList: true, subtree: true});
-        }
+        observer.observe(document.documentElement, {childList: true, subtree: true});
     }());
 </script>
