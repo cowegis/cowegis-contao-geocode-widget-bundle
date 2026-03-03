@@ -25,6 +25,8 @@ use function preg_match;
  * @property string|int|null $mapMinZoom
  * @property string|int|null $mapDefaultZoom
  * @property array|null      $mapCenter
+ * @property string|null     $attribution
+ * @property string|null     $urlTemplate
  * @psalm-suppress PropertyNotSetInConstructor
  * @psalm-suppress ClassMustBeFinal
  */
@@ -123,8 +125,9 @@ class GeocodeWidget extends Widget
                     'radius'       => $this->buildRadiusOptions(),
                     'geocode'      => $this->buildGeocodeOptions(),
                     'mapOptions'   => $this->buildMapOptions(),
-                    'attribution'  => $this->attribution ?? '';
-                    'urlTemplate'  => $this->urlTemplate ?? self::getContainer()->getParameter('cowegis_contao_geocode_widget.url_template'),
+                    'attribution'  => $this->attribution ?? '',
+                    'urlTemplate'  => $this->urlTemplate ?? self::getContainer()
+                            ->getParameter('cowegis_contao_geocode_widget.url_template'),
                 ],
             );
 
@@ -146,10 +149,10 @@ class GeocodeWidget extends Widget
         $options = [];
 
         if (isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'])) {
+            $config = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->name]['eval'];
+
             $options['queryPattern']   = $config['query_pattern'] ?? '';
             $options['queryWidgetIds'] = $config['query_widget_ids'] ?? [];
-
-            return $options;
         }
 
         return $options ?: null;
