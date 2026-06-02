@@ -10,7 +10,7 @@ phpcq:
       signed: false
       requirements:
         composer:
-          doctrine/coding-standard: ^13.0
+          doctrine/coding-standard: ^14.0
     composer-normalize:
       version: ^1.0
       signed: false
@@ -49,7 +49,6 @@ phpcq:
     - 5E6DDE998AB73B8E
     - A978220305CD5C32
     - 97B02DD8E5071466
-    - 99BF4D9A33D65E1E
 tasks:
   fix:
     - composer-normalize-fix
