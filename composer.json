@@ -13,7 +13,6 @@
     "php": "^8.2",
     "ext-json": "*",
     "ext-pdo": "*",
-    "contao-community-alliance/meta-palettes": "^2.0",
     "contao/core-bundle": "^5.3",
     "cowegis/cowegis-client-bundle": "^1.0@dev",
     "symfony/config": "^6.4 || ^7.4",
