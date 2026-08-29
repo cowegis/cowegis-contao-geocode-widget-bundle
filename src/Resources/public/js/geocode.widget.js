@@ -19,15 +19,25 @@ class CowegisGeocodeAbstractPicker {
     _updateCoordinates(position) {
         this.marker.setLatLng(position);
     }
+
+    // "coordinatesInput" is either a single element (comma-separated "lat,lng" mode) or a
+    // [latInput, lngInput] pair (split-fields mode, see CowegisGeocodeWidget's "ids" option).
+    _applyCoordinates(coordinatesInput) {
+        var lat = this.marker ? this.marker.getLatLng().lat : '';
+        var lng = this.marker ? this.marker.getLatLng().lng : '';
+
+        if (Array.isArray(coordinatesInput)) {
+            coordinatesInput[0].set('value', lat);
+            coordinatesInput[1].set('value', lng);
+        } else {
+            coordinatesInput.set('value', this.marker ? (lat + ',' + lng) : '');
+        }
+    }
 }
 
 class CowegisGeocodeMarkerPicker extends CowegisGeocodeAbstractPicker {
     apply(coordinatesInput) {
-        var coordinates = this.marker
-            ? ( this.marker.getLatLng().lat + ',' + this.marker.getLatLng().lng)
-            : '';
-
-        coordinatesInput.set('value', coordinates);
+        this._applyCoordinates(coordinatesInput);
     }
 
     _panTo(position) {
@@ -45,12 +55,9 @@ class CowegisGeocodeMarkerPicker extends CowegisGeocodeAbstractPicker {
 
 class CowegisGeocodeCirclePicker extends CowegisGeocodeAbstractPicker {
     apply(coordinatesInput, radiusInput) {
-        var radius      = '';
-        var coordinates = this.marker
-            ? ( this.marker.getLatLng().lat + ',' + this.marker.getLatLng().lng)
-            : '';
+        var radius = '';
 
-        coordinatesInput.set('value', coordinates);
+        this._applyCoordinates(coordinatesInput);
 
         if (this.marker) {
             radius = Math.round(this.marker.getRadius());
@@ -186,8 +193,16 @@ class CowegisGeocodeWidget {
             }]
         };
 
-        this.element = document.getElementById(this.options.id);
-        this.toggle  = document.getElementById(this.options.id + '_toggle');
+        // Split-fields mode ("ids": [latId, lngId]) shares a single map/picker across two plain
+        // number fields instead of one combined "lat,lng" field - "id" is still used to namespace
+        // the map DOM element and the modal, but no longer names the coordinates field itself.
+        if (Array.isArray(this.options.ids)) {
+            this.element = this.options.ids.map(id => document.getElementById(id));
+            this.toggle  = document.getElementById(this.options.toggleId);
+        } else {
+            this.element = document.getElementById(this.options.id);
+            this.toggle  = document.getElementById(this.options.id + '_toggle');
+        }
         this.toggle.addEvent('click', this._showMap.bind(this));
 
         if (this.options.radius) {
@@ -254,6 +269,19 @@ class CowegisGeocodeWidget {
         return modal;
     }
 
+    // Reads the currently entered coordinates back out of the field(s), whichever mode is active -
+    // null when nothing (usable) has been entered yet.
+    _currentLatLng() {
+        if (Array.isArray(this.element)) {
+            var lat = this.element[0].value;
+            var lng = this.element[1].value;
+
+            return (lat && lng) ? [lat, lng] : null;
+        }
+
+        return this.element.value ? this.element.value.split(/,/) : null;
+    }
+
     _createMap() {
         var map = document.getElementById('cowegis_geocode_widget_map_' + this.options.id);
         var picker = new this.options.picker(map, this.options);
@@ -300,12 +328,13 @@ class CowegisGeocodeWidget {
                 }).openPopup();
             }.bind(this));
 
-            if (this.element.value) {
+            var currentLatLng = this._currentLatLng();
+            if (currentLatLng) {
                 if (this.radius && this.radius.get('value').length > 0) {
                     radius = parseInt(this.radius.get('value'));
                 }
 
-                this.picker.show(map.leaflet.latLng(this.element.value.split(/,/)), radius);
+                this.picker.show(map.leaflet.latLng(currentLatLng), radius);
             }
         }.bind(this));
 

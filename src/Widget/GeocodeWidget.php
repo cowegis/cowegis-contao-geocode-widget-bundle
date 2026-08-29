@@ -20,6 +20,7 @@ use function preg_match;
 /**
  * @property int             $size
  * @property bool            $multiple
+ * @property bool            $splitCoordinates
  * @property string          $radius
  * @property string|int|null $mapMaxZoom
  * @property string|int|null $mapMinZoom
@@ -96,6 +97,14 @@ class GeocodeWidget extends Widget
     #[Override]
     public function generate(): string
     {
+        // Split-fields mode renders exactly two plain inputs (latitude, longitude) sharing one
+        // map/picker - unrelated to and mutually exclusive with the "multiple" mode below, which
+        // renders N fully independent geocode widgets (each with its own map/picker, all writing
+        // the same "lat,lng" shape into their own field).
+        if ($this->splitCoordinates) {
+            return $this->generateSplit();
+        }
+
         $wrapperClass = 'wizard';
 
         if (! $this->multiple || ! $this->size) {
@@ -136,6 +145,45 @@ class GeocodeWidget extends Widget
         }
 
         return $buffer;
+    }
+
+    /**
+     * Render exactly two fields (latitude, longitude) sharing a single map/picker, instead of one
+     * combined "lat,lng" field. Accepts the value either as a [lat, lng] array (what MetaModels'
+     * "latlong" attribute passes in) or, defensively, as a "lat,lng" string.
+     */
+    private function generateSplit(): string
+    {
+        $value = $this->value;
+        if (! is_array($value)) {
+            $value = explode(',', (string) $value, 2);
+        }
+
+        $template = new BackendTemplate('be_widget_cowegis_geocode_split');
+        $template->setData(
+            [
+                'wrapperClass' => 'wizard wizard_2',
+                'widget'       => $this,
+                'valueLat'     => StringUtil::specialchars((string) ($value[0] ?? '')),
+                'valueLng'     => StringUtil::specialchars((string) ($value[1] ?? '')),
+                'class'        => $this->strClass ? ' ' . $this->strClass : '',
+                'idLat'        => $this->strId . '_0',
+                'idLng'        => $this->strId . '_1',
+                'nameLat'      => $this->strName . '[]',
+                'nameLng'      => $this->strName . '[]',
+                'attributes'   => $this->getAttributes(),
+                'wizard'       => $this->wizard,
+                'label'        => $this->strLabel,
+                'radius'       => $this->buildRadiusOptions(),
+                'geocode'      => $this->buildGeocodeOptions(),
+                'mapOptions'   => $this->buildMapOptions(),
+                'attribution'  => $this->attribution ?? '',
+                'urlTemplate'  => $this->urlTemplate ?? self::getContainer()
+                        ->getParameter('cowegis_contao_geocode_widget.url_template'),
+            ],
+        );
+
+        return $template->parse();
     }
 
     /**

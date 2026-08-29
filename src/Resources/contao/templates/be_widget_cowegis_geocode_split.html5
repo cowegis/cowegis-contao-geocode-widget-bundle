@@ -1,0 +1,74 @@
+<?php
+
+$GLOBALS['TL_CSS'][] = '/bundles/cowegiscontaogeocodewidget/css/backend.css';
+
+$GLOBALS['TL_JAVASCRIPT']['cowegisclient'] = '/bundles/cowegisclient/js/cowegis.js';
+$GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidget/js/geocode.widget.js';
+?>
+
+<div class="<?= $this->wrapperClass ?>">
+    <input type="text"
+           name="<?= $this->nameLat ?>"
+           id="ctrl_<?= $this->idLat ?>"
+           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
+           value="<?= $this->valueLat ?>"<?= $this->attributes ?>
+           onfocus="Backend.getScrollOffset()"
+    >
+    <input type="text"
+           name="<?= $this->nameLng ?>"
+           id="ctrl_<?= $this->idLng ?>"
+           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
+           value="<?= $this->valueLng ?>"<?= $this->attributes ?>
+           onfocus="Backend.getScrollOffset()"
+    >
+
+    <a href="#"><img src="/bundles/cowegiscontaogeocodewidget/img/map.png" id="ctrl_<?= $this->idLat ?>_toggle"></a>
+</div>
+
+<?= $this->wizard ?>
+<script>
+    (function () {
+        function init() {
+            var idLat = 'ctrl_<?= $this->idLat ?>';
+            var idLng = 'ctrl_<?= $this->idLng ?>';
+            if (!document.getElementById(idLat) || !document.getElementById(idLng)) {
+                return false;
+            }
+
+            new CowegisGeocodeWidget({
+                id: idLat,
+                ids: [idLat, idLng],
+                toggleId: idLat + '_toggle',
+                searchPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisSearchPositionLabel'] ?>',
+                applyPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisApplyPositionLabel'] ?>',
+                confirmPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisConfirmPositionLabel'] ?>',
+                okLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisOkLabel'] ?>',
+                cancelLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisCancelLabel'] ?>',
+                modalTitle: '<?= $this->label ?>',
+                map: <?= json_encode($this->mapOptions) ?>,<?php if ($this->radius): ?>
+                radius: <?= json_encode($this->radius) ?>,
+                picker: CowegisGeocodeCirclePicker,
+            <?php endif ?>
+            <?php if ($this->urlTemplate): ?>
+                urlTemplate: <?= json_encode($this->urlTemplate) ?>,
+            <?php endif ?>
+            <?php if ($this->attribution): ?>
+                attribution: <?= json_encode($this->attribution) ?>,
+            <?php endif ?>
+            <?php if ($this->geocode): ?>
+                geocode: <?= json_encode($this->geocode) ?>,
+            <?php endif ?>
+            });
+
+            return true;
+        }
+
+        var observer = new MutationObserver(function () {
+            if (init()) {
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.documentElement, {childList: true, subtree: true});
+    }());
+</script>
