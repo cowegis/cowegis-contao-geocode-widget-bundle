@@ -7,20 +7,22 @@ $GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidg
 ?>
 
 <div class="<?= $this->wrapperClass ?>">
-    <input type="text"
-           name="<?= $this->nameLat ?>"
-           id="ctrl_<?= $this->idLat ?>"
-           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
-           value="<?= $this->valueLat ?>"<?= $this->attributes ?>
-           onfocus="Backend.getScrollOffset()"
-    >
-    <input type="text"
-           name="<?= $this->nameLng ?>"
-           id="ctrl_<?= $this->idLng ?>"
-           class="tl_text tl_cowegis_geocode<?= $this->class ?>"
-           value="<?= $this->valueLng ?>"<?= $this->attributes ?>
-           onfocus="Backend.getScrollOffset()"
-    >
+    <div id="ctrl_<?= $this->idLat ?>_field" class="tl_text_field">
+        <input type="text"
+               name="<?= $this->nameLat ?>"
+               id="ctrl_<?= $this->idLat ?>"
+               class="tl_text_2 tl_cowegis_geocode<?= $this->class ?>"
+               value="<?= $this->valueLat ?>"<?= $this->attributes ?>
+               onfocus="Backend.getScrollOffset()"
+        >
+        <input type="text"
+               name="<?= $this->nameLng ?>"
+               id="ctrl_<?= $this->idLng ?>"
+               class="tl_text_2 tl_cowegis_geocode<?= $this->class ?>"
+               value="<?= $this->valueLng ?>"<?= $this->attributes ?>
+               onfocus="Backend.getScrollOffset()"
+        >
+    </div>
 
     <a href="#"><img src="/bundles/cowegiscontaogeocodewidget/img/map.png" id="ctrl_<?= $this->idLat ?>_toggle"></a>
 </div>
