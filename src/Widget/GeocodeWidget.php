@@ -14,6 +14,7 @@ use function array_map;
 use function assert;
 use function intval;
 use function is_array;
+use function is_numeric;
 use function max;
 use function preg_match;
 
@@ -73,6 +74,10 @@ class GeocodeWidget extends Widget
             return $varInput;
         }
 
+        if ($this->splitCoordinates) {
+            return $this->validateSplitCoordinates($varInput);
+        }
+
         if (is_array($varInput)) {
             foreach ($varInput as $key => $val) {
                 $varInput[$key] = $this->validator($val);
@@ -92,6 +97,52 @@ class GeocodeWidget extends Widget
         }
 
         return $varInput;
+    }
+
+    /**
+     * Validate the split-fields layout's two plain latitude/longitude inputs - each holds a single
+     * number, unlike the combined "lat,lng" field the regex-based check above is written for.
+     * Leaves an untouched (both empty) pair alone, same as an empty combined field.
+     *
+     * dc-general's own input processing (ContaoWidgetManager::processInput()) validates each
+     * element of an array-shaped property value individually, in addition to validating the array
+     * as a whole - a lone scalar half is meaningless to check in isolation (no way to tell whether
+     * it is the latitude or the longitude), so it is left untouched; the array-shaped call does the
+     * actual check.
+     *
+     * @param mixed $varInput
+     *
+     * @return mixed
+     */
+    private function validateSplitCoordinates($varInput)
+    {
+        if (! is_array($varInput)) {
+            return $varInput;
+        }
+
+        $latitude  = $varInput[0] ?? '';
+        $longitude = $varInput[1] ?? '';
+
+        if ($latitude === '' && $longitude === '') {
+            return $varInput;
+        }
+
+        if (
+            ! $this->isValidCoordinate($latitude, -90, 90)
+            || ! $this->isValidCoordinate($longitude, -180, 180)
+        ) {
+            $this->addError(
+                $this->translate('ERR.cowegisInvalidCoordinate', [$latitude . ',' . $longitude], 'contao_default'),
+            );
+        }
+
+        return $varInput;
+    }
+
+    /** @param mixed $value */
+    private function isValidCoordinate($value, float $min, float $max): bool
+    {
+        return is_numeric($value) && (float) $value >= $min && (float) $value <= $max;
     }
 
     #[Override]
