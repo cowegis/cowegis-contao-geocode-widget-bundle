@@ -12,6 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_map;
 use function assert;
+use function explode;
 use function intval;
 use function is_array;
 use function is_numeric;
@@ -109,12 +110,8 @@ class GeocodeWidget extends Widget
      * as a whole - a lone scalar half is meaningless to check in isolation (no way to tell whether
      * it is the latitude or the longitude), so it is left untouched; the array-shaped call does the
      * actual check.
-     *
-     * @param mixed $varInput
-     *
-     * @return mixed
      */
-    private function validateSplitCoordinates($varInput)
+    private function validateSplitCoordinates(mixed $varInput): mixed
     {
         if (! is_array($varInput)) {
             return $varInput;
@@ -139,8 +136,7 @@ class GeocodeWidget extends Widget
         return $varInput;
     }
 
-    /** @param mixed $value */
-    private function isValidCoordinate($value, float $min, float $max): bool
+    private function isValidCoordinate(mixed $value, float $min, float $max): bool
     {
         return is_numeric($value) && (float) $value >= $min && (float) $value <= $max;
     }
