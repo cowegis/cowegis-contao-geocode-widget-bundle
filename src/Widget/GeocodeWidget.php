@@ -7,19 +7,24 @@ namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 use Contao\BackendTemplate;
 use Contao\StringUtil;
 use Contao\Widget;
+use LogicException;
 use Override;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_map;
 use function assert;
+use function explode;
 use function intval;
 use function is_array;
+use function is_numeric;
 use function max;
 use function preg_match;
+use function sprintf;
 
 /**
  * @property int             $size
  * @property bool            $multiple
+ * @property bool            $splitCoordinates
  * @property string          $radius
  * @property string|int|null $mapMaxZoom
  * @property string|int|null $mapMinZoom
@@ -72,6 +77,10 @@ class GeocodeWidget extends Widget
             return $varInput;
         }
 
+        if ($this->splitCoordinates) {
+            return $this->validateSplitCoordinates($varInput);
+        }
+
         if (is_array($varInput)) {
             foreach ($varInput as $key => $val) {
                 $varInput[$key] = $this->validator($val);
@@ -93,9 +102,69 @@ class GeocodeWidget extends Widget
         return $varInput;
     }
 
+    /**
+     * Validate the split-fields layout's two plain latitude/longitude inputs - each holds a single
+     * number, unlike the combined "lat,lng" field the regex-based check above is written for.
+     * Leaves an untouched (both empty) pair alone, same as an empty combined field.
+     *
+     * dc-general's own input processing (ContaoWidgetManager::processInput()) validates each
+     * element of an array-shaped property value individually, in addition to validating the array
+     * as a whole - a lone scalar half is meaningless to check in isolation (no way to tell whether
+     * it is the latitude or the longitude), so it is left untouched; the array-shaped call does the
+     * actual check.
+     */
+    private function validateSplitCoordinates(mixed $varInput): mixed
+    {
+        if (! is_array($varInput)) {
+            return $varInput;
+        }
+
+        $latitude  = $varInput[0] ?? '';
+        $longitude = $varInput[1] ?? '';
+
+        if ($latitude === '' && $longitude === '') {
+            return $varInput;
+        }
+
+        if (
+            ! $this->isValidCoordinate($latitude, -90, 90)
+            || ! $this->isValidCoordinate($longitude, -180, 180)
+        ) {
+            $this->addError(
+                $this->translate('ERR.cowegisInvalidCoordinate', [$latitude . ',' . $longitude], 'contao_default'),
+            );
+        }
+
+        return $varInput;
+    }
+
+    private function isValidCoordinate(mixed $value, float $min, float $max): bool
+    {
+        return is_numeric($value) && (float) $value >= $min && (float) $value <= $max;
+    }
+
     #[Override]
     public function generate(): string
     {
+        // Split-fields mode renders exactly two plain inputs (latitude, longitude) sharing one
+        // map/picker. It does not work together with the "multiple" mode below, which renders N fully
+        // independent geocode widgets (each with its own map/picker, all writing the same "lat,lng"
+        // shape into their own field) - fail loudly instead of silently dropping all but one pair.
+        if ($this->splitCoordinates) {
+            if ($this->multiple && $this->size > 1) {
+                throw new LogicException(
+                    sprintf(
+                        'The field "%s" combines "splitCoordinates" with "multiple" and a size of %d - '
+                        . 'the split-fields layout supports a single latitude/longitude pair only.',
+                        $this->strName,
+                        $this->size,
+                    ),
+                );
+            }
+
+            return $this->generateSplit();
+        }
+
         $wrapperClass = 'wizard';
 
         if (! $this->multiple || ! $this->size) {
@@ -136,6 +205,45 @@ class GeocodeWidget extends Widget
         }
 
         return $buffer;
+    }
+
+    /**
+     * Render exactly two fields (latitude, longitude) sharing a single map/picker, instead of one
+     * combined "lat,lng" field. Accepts the value either as a [lat, lng] array (the shape the value has in
+     * this mode) or, defensively, as a "lat,lng" string.
+     */
+    private function generateSplit(): string
+    {
+        $value = $this->value;
+        if (! is_array($value)) {
+            $value = explode(',', (string) $value, 2);
+        }
+
+        $template = new BackendTemplate('be_widget_cowegis_geocode_split');
+        $template->setData(
+            [
+                'wrapperClass' => 'wizard wizard_2',
+                'widget'       => $this,
+                'valueLat'     => StringUtil::specialchars((string) ($value[0] ?? '')),
+                'valueLng'     => StringUtil::specialchars((string) ($value[1] ?? '')),
+                'class'        => $this->strClass ? ' ' . $this->strClass : '',
+                'idLat'        => $this->strId . '_0',
+                'idLng'        => $this->strId . '_1',
+                'nameLat'      => $this->strName . '[]',
+                'nameLng'      => $this->strName . '[]',
+                'attributes'   => $this->getAttributes(),
+                'wizard'       => $this->wizard,
+                'label'        => $this->strLabel,
+                'radius'       => $this->buildRadiusOptions(),
+                'geocode'      => $this->buildGeocodeOptions(),
+                'mapOptions'   => $this->buildMapOptions(),
+                'attribution'  => $this->attribution ?? '',
+                'urlTemplate'  => $this->urlTemplate ?? self::getContainer()
+                        ->getParameter('cowegis_contao_geocode_widget.url_template'),
+            ],
+        );
+
+        return $template->parse();
     }
 
     /**

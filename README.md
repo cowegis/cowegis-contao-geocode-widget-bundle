@@ -55,8 +55,8 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
     'inputType' => 'cowegis_geocode',
     'eval'      => [
         'query_pattern'    => '#ctrl_street# #ctrl_zip# #ctrl_city#, Deutschland',
-        'url_template'     => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-        'attribution'      => 'Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'.
+        'urlTemplate'      => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        'attribution'      => 'Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>',
         'tl_class'         => 'w50',
     ],
     'sql' => 'varchar(255) NOT NULL default \'\''
@@ -66,8 +66,35 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
 The information is as follows:
 
 - `query_pattern`: Pattern as it appears in the search input in the pop-up - the field IDs with `#<id>#`
-- `url_template`: Template for the map
+- `urlTemplate`: Template for the map (note the camelCase spelling - Contao copies `eval` keys into the
+  widget's attributes verbatim, without any snake_case-to-camelCase mapping)
 - `attribution`: Note on the map layer
+
+#### Split fields (latitude and longitude as two separate fields)
+
+By default, the widget writes a single comma-separated `"latitude,longitude"` value into one field, as
+shown above. Set `eval.splitCoordinates` to render latitude and longitude as two plain fields instead,
+sharing one map/address picker. The field's submitted value then becomes an array
+(`[latitude, longitude]`) rather than a comma-separated string - plan the field's storage accordingly
+(e.g. a serializing save callback, or an attribute/widget layer that already expects that array shape).
+
+```php
+$GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
+    'label'     => ['Coordinates', 'Enter the coordinates.'],
+    'inputType' => 'cowegis_geocode',
+    'eval'      => [
+        'splitCoordinates' => true,
+        'query_pattern'    => '#ctrl_street# #ctrl_zip# #ctrl_city#, Deutschland',
+        'tl_class'         => 'w50',
+    ],
+    'sql' => 'blob NULL'
+];
+```
+
+The split-fields layout renders exactly one latitude/longitude pair. It cannot be combined with the
+`multiple`/`size` option below - that one renders several fully independent geocode widgets (each with
+its own map/picker), not one search feeding two fields. Setting `splitCoordinates` together with
+`multiple` and a `size` above 1 throws a `LogicException` instead of silently dropping the extra pairs.
 
 #### Coordinates and radius
 

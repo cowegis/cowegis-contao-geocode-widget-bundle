@@ -27,6 +27,14 @@ $GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidg
             if (!el) {
                 return false;
             }
+            <?php if ($this->radius): ?>
+            // The radius field can be positioned after this widget in the form, so its element may
+            // not exist in the DOM yet even though this one already does (inline scripts run as the
+            // parser reaches them) - keep retrying via the observer below instead of crashing on it.
+            if (!document.getElementById('<?= $this->radius['element'] ?>')) {
+                return false;
+            }
+            <?php endif ?>
 
             new CowegisGeocodeWidget({
                 id: id,
@@ -42,6 +50,9 @@ $GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidg
             <?php endif ?>
             <?php if ($this->urlTemplate): ?>
                 urlTemplate: <?= json_encode($this->urlTemplate) ?>,
+            <?php endif ?>
+            <?php if ($this->attribution): ?>
+                attribution: <?= json_encode($this->attribution) ?>,
             <?php endif ?>
             <?php if ($this->geocode): ?>
                 geocode: <?= json_encode($this->geocode) ?>,
