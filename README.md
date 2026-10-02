@@ -76,8 +76,7 @@ By default, the widget writes a single comma-separated `"latitude,longitude"` va
 shown above. Set `eval.splitCoordinates` to render latitude and longitude as two plain fields instead,
 sharing one map/address picker. The field's submitted value then becomes an array
 (`[latitude, longitude]`) rather than a comma-separated string - plan the field's storage accordingly
-(e.g. a serializing save callback, or an attribute/widget layer that already expects that array shape,
-such as MetaModels' `latlong` attribute).
+(e.g. a serializing save callback, or an attribute/widget layer that already expects that array shape).
 
 ```php
 $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
@@ -92,8 +91,10 @@ $GLOBALS['TL_DCA']['tl_example']['fields']['coordinates'] = [
 ];
 ```
 
-This is unrelated to the `multiple`/`size` option below - that one renders several fully independent
-geocode widgets (each with its own map/picker), not one search feeding two fields.
+The split-fields layout renders exactly one latitude/longitude pair. It cannot be combined with the
+`multiple`/`size` option below - that one renders several fully independent geocode widgets (each with
+its own map/picker), not one search feeding two fields. Setting `splitCoordinates` together with
+`multiple` and a `size` above 1 throws a `LogicException` instead of silently dropping the extra pairs.
 
 #### Coordinates and radius
 

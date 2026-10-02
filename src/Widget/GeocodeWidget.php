@@ -7,6 +7,7 @@ namespace Cowegis\Bundle\ContaoGeocodeWidget\Widget;
 use Contao\BackendTemplate;
 use Contao\StringUtil;
 use Contao\Widget;
+use LogicException;
 use Override;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -18,6 +19,7 @@ use function is_array;
 use function is_numeric;
 use function max;
 use function preg_match;
+use function sprintf;
 
 /**
  * @property int             $size
@@ -145,10 +147,21 @@ class GeocodeWidget extends Widget
     public function generate(): string
     {
         // Split-fields mode renders exactly two plain inputs (latitude, longitude) sharing one
-        // map/picker - unrelated to and mutually exclusive with the "multiple" mode below, which
-        // renders N fully independent geocode widgets (each with its own map/picker, all writing
-        // the same "lat,lng" shape into their own field).
+        // map/picker. It does not work together with the "multiple" mode below, which renders N fully
+        // independent geocode widgets (each with its own map/picker, all writing the same "lat,lng"
+        // shape into their own field) - fail loudly instead of silently dropping all but one pair.
         if ($this->splitCoordinates) {
+            if ($this->multiple && $this->size > 1) {
+                throw new LogicException(
+                    sprintf(
+                        'The field "%s" combines "splitCoordinates" with "multiple" and a size of %d - '
+                        . 'the split-fields layout supports a single latitude/longitude pair only.',
+                        $this->strName,
+                        $this->size,
+                    ),
+                );
+            }
+
             return $this->generateSplit();
         }
 
@@ -196,8 +209,8 @@ class GeocodeWidget extends Widget
 
     /**
      * Render exactly two fields (latitude, longitude) sharing a single map/picker, instead of one
-     * combined "lat,lng" field. Accepts the value either as a [lat, lng] array (what MetaModels'
-     * "latlong" attribute passes in) or, defensively, as a "lat,lng" string.
+     * combined "lat,lng" field. Accepts the value either as a [lat, lng] array (the shape the value has in
+     * this mode) or, defensively, as a "lat,lng" string.
      */
     private function generateSplit(): string
     {
