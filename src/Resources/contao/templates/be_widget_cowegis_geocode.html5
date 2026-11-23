@@ -28,7 +28,15 @@ $GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidg
                 return false;
             }
 
-            new CowegisGeocodeWidget({
+            if (typeof CowegisGeocodeWidget === 'undefined') {
+                var script = document.querySelector('script[src*="/cowegiscontaogeocodewidget/js/geocode.widget.js"]');
+                if (script) {
+                    script.addEventListener('load', check);
+                }
+                return false;
+            }
+
+            var widget = new CowegisGeocodeWidget({
                 id: id,
                 searchPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisSearchPositionLabel'] ?>',
                 applyPositionLabel: '<?= $GLOBALS['TL_LANG']['MSC']['cowegisApplyPositionLabel'] ?>',
@@ -47,15 +55,20 @@ $GLOBALS['TL_JAVASCRIPT']['cowegisgeocode'] = '/bundles/cowegiscontaogeocodewidg
                 geocode: <?= json_encode($this->geocode) ?>,
             <?php endif ?>
             });
-            
+
+            widget.mapOptions.map.controls[0].options.suggestMinLength = Infinity;
+
             return true;
         }
 
-        var observer = new MutationObserver(function () {
-            if (init()) {
+        function check() {
+            if (observer && init()) {
                 observer.disconnect();
+                observer = null;
             }
-        });
+        }
+
+        var observer = new MutationObserver(check);
 
         observer.observe(document.documentElement, {childList: true, subtree: true});
     }());
